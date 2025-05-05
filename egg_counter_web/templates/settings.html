@@ -1,0 +1,215 @@
+<!-- SETTINGS MODAL -->
+<!-- Settings Modal (hidden by default) -->
+<div x-show="showSettings" x-cloak x-transition class="fixed inset-0 z-10 overflow-y-auto" role="dialog"
+  aria-modal="true" @click.away="showSettings = false" @keydown.escape.window="showSettings = false">
+  <!-- Backdrop -->
+  <div class="fixed inset-0 bg-gray-500 bg-opacity-75"></div>
+
+  <!-- Modal panel -->
+  <div class="relative mx-auto mt-20 max-w-3xl p-4">
+    <div class="relative rounded-lg bg-white shadow-xl">
+
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between px-6 py-3 border-b border-gray-200">
+        <h3 class="text-lg font-semibold text-gray-900">
+          Settings
+        </h3>
+        <!-- Close button (X) -->
+        <button @click="showSettings = false" class="text-gray-400 hover:text-gray-600">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Tabs + Panels -->
+      <div x-data="{ activeTab: 'video' }" class="px-6 pt-4">
+        <!-- Tabs -->
+        <nav class="flex -mb-px space-x-2">
+          <template x-for="tab in ['video','display','output','detect','image','motion']" :key="tab">
+            <button @click="activeTab = tab"
+              :class="activeTab === tab ? 'border border-t border-l border-r border-gray-300 bg-white text-blue-600' : 'border-b-2 border-transparent bg-gray-100 text-gray-600 hover:bg-white hover:border-gray-300'"
+              class="px-4 py-2 text-sm font-medium rounded-t-lg focus:outline-none capitalize"
+              x-text="tab.replace('-', ' ')">
+            </button>
+          </template>
+        </nav>
+
+        <!-- Content Panels -->
+        <div class="border border-gray-300 bg-white p-6 max-h-[60vh] overflow-y-auto">
+
+          <!-- Video Input -->
+          <div x-show="activeTab==='video'" x-cloak class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="flex items-center">
+              <input id="use_video_file" type="checkbox" x-model="settings.use_video_file"
+                class="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
+              <label for="use_video_file" class="ml-2 text-sm font-medium text-gray-700">Use Video File</label>
+            </div>
+            <div>
+              <label for="webcam_index" class="block text-sm font-medium text-gray-700">Webcam Index</label>
+              <input id="webcam_index" type="number" x-model.number="settings.webcam_index"
+                class="mt-1 block w-32 rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200" />
+            </div>
+            <div>
+              <label for="webcam_width" class="block text-sm font-medium text-gray-700">Webcam Width (px)</label>
+              <input id="webcam_width" type="number" x-model.number="settings.webcam_width"
+                class="mt-1 block w-32 rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200" />
+            </div>
+            <div>
+              <label for="webcam_height" class="block text-sm font-medium text-gray-700">Webcam Height (px)</label>
+              <input id="webcam_height" type="number" x-model.number="settings.webcam_height"
+                class="mt-1 block w-32 rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200" />
+            </div>
+          </div>
+
+          <!-- Display & UI -->
+          <div x-show="activeTab==='display'" x-cloak class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="flex items-center">
+              <input id="show_window" type="checkbox" x-model="settings.show_window"
+                class="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
+              <label for="show_window" class="ml-2 text-sm font-medium text-gray-700">Show Window</label>
+            </div>
+            <div class="flex items-center">
+              <input id="enable_waitkey" type="checkbox" x-model="settings.enable_waitkey"
+                class="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
+              <label for="enable_waitkey" class="ml-2 text-sm font-medium text-gray-700">Enable WaitKey</label>
+            </div>
+            <div>
+              <label for="frame_delay_ms" class="block text-sm font-medium text-gray-700">Frame Delay (ms)</label>
+              <input id="frame_delay_ms" type="number" x-model.number="settings.frame_delay_ms"
+                class="mt-1 block w-32 rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200" />
+            </div>
+            <div class="flex items-center">
+              <input id="debug_logging_enabled" type="checkbox" x-model="settings.debug_logging_enabled"
+                class="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
+              <label for="debug_logging_enabled" class="ml-2 text-sm font-medium text-gray-700">Enable Debug
+                Logging</label>
+            </div>
+            <div class="flex items-center">
+              <div>
+                <label for="email_password" class="block text-sm font-medium text-gray-700">Email Password</label>
+
+                <input id="email_password" type="text" x-model.number="settings.email_password"
+                  class="mt-1 block w-32 rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Output -->
+        <div x-show="activeTab==='output'" x-cloak class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="flex items-center">
+            <input id="save_frame_image" type="checkbox" x-model="settings.save_frame_image"
+              class="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
+            <label for="save_frame_image" class="ml-2 text-sm font-medium text-gray-700">Save Frames</label>
+          </div>
+          <div class="flex items-center">
+            <input id="save_video" type="checkbox" x-model="settings.save_video"
+              class="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
+            <label for="save_video" class="ml-2 text-sm font-medium text-gray-700">Save Video</label>
+          </div>
+          <div class="flex items-center">
+            <input id="csv_log_enabled" type="checkbox" x-model="settings.csv_log_enabled"
+              class="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
+            <label for="csv_log_enabled" class="ml-2 text-sm font-medium text-gray-700">CSV Logging</label>
+          </div>
+        </div>
+
+        <!-- Detection Parameters -->
+        <div x-show="activeTab==='detect'" x-cloak class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label for="min_area" class="block text-sm font-medium text-gray-700">Min Area (px²)</label>
+            <input id="min_area" type="number" x-model.number="settings.min_area"
+              class="mt-1 block w-32 rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200" />
+          </div>
+          <div>
+            <label for="max_area" class="block text-sm font-medium text-gray-700">Max Area (px²)</label>
+            <input id="max_area" type="number" x-model.number="settings.max_area"
+              class="mt-1 block w-32 rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200" />
+          </div>
+          <div>
+            <label for="y_start_line" class="block text-sm font-medium text-gray-700">Start Line (Y)</label>
+            <input id="y_start_line" type="number" x-model.number="settings.y_start_line"
+              class="mt-1 block w-32 rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200" />
+          </div>
+          <div>
+            <label for="y_count_line" class="block text-sm font-medium text-gray-700">Count Line (Y)</label>
+            <input id="y_count_line" type="number" x-model.number="settings.y_count_line"
+              class="mt-1 block w-32 rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200" />
+          </div>
+          <div>
+            <label for="num_rows" class="block text-sm font-medium text-gray-700">Rows</label>
+            <input id="num_rows" type="number" x-model.number="settings.num_rows"
+              class="mt-1 block w-20 rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200" />
+          </div>
+          <div>
+            <label for="skip_radius_y" class="block text-sm font-medium text-gray-700">Skip Radius (Y)</label>
+            <input id="skip_radius_y" type="number" x-model.number="settings.skip_radius_y"
+              class="mt-1 block w-20 rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200" />
+          </div>
+          <div>
+            <label for="min_frames_between_counts" class="block text-sm font-medium text-gray-700">Min Frames
+              Between Counts</label>
+            <input id="min_frames_between_counts" type="number" x-model.number="settings.min_frames_between_counts"
+              class="mt-1 block w-32 rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200" />
+          </div>
+        </div>
+
+        <!-- Image Processing -->
+        <div x-show="activeTab==='image'" x-cloak class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="flex items-center">
+            <input id="rotate_frame" type="checkbox" x-model="settings.rotate_frame"
+              class="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
+            <label for="rotate_frame" class="ml-2 text-sm font-medium text-gray-700">Rotate Frame 180°</label>
+          </div>
+        </div>
+
+        <!-- Motion Detection -->
+        <div x-show="activeTab==='motion'" x-cloak class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="flex items-center">
+            <input id="motion_enabled" type="checkbox" x-model="settings.motion_enabled"
+              class="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
+            <label for="motion_enabled" class="ml-2 text-sm font-medium text-gray-700">Enable Motion
+              Detection</label>
+          </div>
+          <div>
+            <label for="motion_threshold" class="block text-sm font-medium text-gray-700">Motion Threshold</label>
+            <input id="motion_threshold" type="number" step="0.1" x-model.number="settings.motion_threshold"
+              class="mt-1 block w-32 rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200" />
+          </div>
+          <div>
+            <label for="min_movement_frames" class="block text-sm font-medium text-gray-700">Min Movement
+              Frames</label>
+            <input id="min_movement_frames" type="number" x-model.number="settings.min_movement_frames"
+              class="mt-1 block w-32 rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200" />
+          </div>
+          <div>
+            <label for="max_stationary_frames" class="block text-sm font-medium text-gray-700">Max Stationary
+              Frames</label>
+            <input id="max_stationary_frames" type="number" x-model.number="settings.max_stationary_frames"
+              class="mt-1 block w-32 rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200" />
+          </div>
+          <div>
+            <label for="motion_check_interval" class="block text-sm font-medium text-gray-700">Check Interval
+              (frames)</label>
+            <input id="motion_check_interval" type="number" x-model.number="settings.motion_check_interval"
+              class="mt-1 block w-32 rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200" />
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-end space-x-3">
+      <button @click="showSettings = false" type="button"
+        class="rounded-md border border-red-600 bg-red-600 text-white px-4 py-2 text-sm font-medium hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+        Cancel
+      </button>
+      <button @click="saveSettings()" type="button"
+        class="rounded-md border border-green-600 bg-green-600 text-white px-4 py-2 text-sm font-semibold hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+        Save
+      </button>
+    </div>
+  </div>
+</div>

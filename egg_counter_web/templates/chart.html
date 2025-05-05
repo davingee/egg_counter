@@ -1,0 +1,15 @@
+<!-- COUNTS & CHART -->
+<div class="w-screen h-[85vh] bg-white p-6">
+  <div class="flex justify-center space-x-20 mb-8">
+    <div class="text-5xl font-extrabold text-blue-600 text-center">
+      House 1<br><span x-text="counts['house1']">0</span>
+    </div>
+    <div class="text-5xl font-extrabold text-green-600 text-center">
+      House 2<br><span x-text="counts['house2']">0</span>
+    </div>
+  </div>
+
+  <div class="flex justify-center items-center w-full h-[calc(100%-8rem)]">
+    <canvas id="trendChart" class="w-full h-full border border-gray-300 rounded-lg shadow-sm"></canvas>
+  </div>
+</div>

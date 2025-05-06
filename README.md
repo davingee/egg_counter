@@ -24,30 +24,71 @@ A real‑time egg‑counting dashboard built with **FastAPI**, **Redis**, **Post
 Below is the layout of this repository, viewed from the GitHub root:
 
 ```text
-├── README.md                # Project overview and setup instructions
-├── requirements.txt         # Python dependencies
+├── requirements.txt         # pip dependencies list
 ├── environment.yml          # Conda environment definition
-├── .env.example             # Environment variable template
-├── static/                  # Frontend assets (CSS, JS, images)
-│   ├── css/
-│   └── js/
-├── templates/               # Jinja2 HTML templates
-│   └── index.html           # Main SPA template
-├── egg_counter/             # Core application logic
+├── web/                     # Frontend and FastAPI app
+│   ├── tailwind.config.js   # Tailwind CSS configuration
+│   ├── .DS_Store            # macOS metadata (ignore)
+│   ├── postcss.config.mjs   # PostCSS setup
+│   ├── package-lock.json    # npm lockfile
+│   ├── package.json         # npm dependencies & scripts
+│   ├── static/              # Static assets (served under /static)
+│   │   ├── favicon.ico      # Browser icon
+│   │   ├── css/
+│   │   │   └── styles.css   # Compiled Tailwind CSS
+│   │   └── js/              # Frontend JavaScript
+│   │       ├── chart.js     # Chart.js plugin
+│   │       ├── state.js     # Alpine.js state logic
+│   │       ├── module.esm.js# Alpine.js module loader
+│   │       ├── chart.umd.min.js # Chart.js UMD bundle
+│   │       ├── api.js       # HTTP + WebSocket API helper
+│   │       └── app.js       # SPA initialization
+│   ├── templates/           # Jinja2 templates
+│   │   ├── navbar.html      # Navigation bar partial
+│   │   ├── index.html       # Dashboard layout
+│   │   ├── base.html        # Base HTML skeleton
+│   │   ├── chart.html       # Chart component
+│   │   └── settings.html    # Settings modal UI
+│   ├── egg_counter/         # Backend business logic
+│   │   ├── .DS_Store        # metadata (ignore)
+│   │   ├── controller.py    # Manages the counter subprocess
+│   │   ├── config.py        # Pydantic settings loader
+│   │   ├── schemas.py       # Pydantic models for endpoints
+│   │   ├── clients.py       # Redis & Postgres clients
+│   │   ├── api/             # API routers
+│   │   │   ├── websocket.py # WebSocket endpoint
+│   │   │   └── routes.py    # REST endpoints
+│   │   ├── services/        # Helper services
+│   │   │   ├── csv_export.py# CSV export & email logic
+│   │   │   └── upsert.py    # Database upsert logic
+│   │   └── counts.py        # Redis fetch & fallback logic
+│   ├── main.py              # FastAPI app entrypoint
+│   └── src/
+│       └── styles.css       # Tailwind imports for development
+├── output/                  # Generated outputs
+│   └── egg_row_output.avi   # Sample video output
+├── shared/                  # Shared utility package
+│   ├── egg.mp4              # Sample media file
 │   ├── __init__.py          # Package marker
-│   ├── config.py            # Pydantic settings & env loading
-│   ├── clients.py           # Redis & Postgres client initialization
-│   ├── counts.py            # Redis fetch, fallback, upsert functions
-│   ├── controller.py        # Subprocess manager for egg-counter script
-│   ├── schemas.py           # Pydantic models for request bodies
-│   ├── api/
-│   │   ├── routes.py        # REST endpoints (status, counts, start/stop, settings, trends)
-│   │   └── websocket.py     # WebSocket endpoint for live counts
-│   └── services/
-│       ├── upsert.py        # Database upsert logic
-│   │   └── csv_export.py    # CSV export & email logic
-└── egg_counter_shared/      # Separate package (install via pip -e)
-    └── helper.py            # Shared utility functions (key generators, date math)
+│   └── helper.py            # Shared helper functions
+├── README.md                # This documentation
+├── .gitignore               # Git ignore rules
+├── .env                     # Environment overrides (not committed)
+├── readme.txt               # Legacy README
+├── application/             # Legacy CLI application
+│   ├── migrate_settings.py  # DB migration script
+│   ├── .DS_Store            # metadata
+│   ├── egg_counter/         # Legacy egg_counter package
+│   │   ├── __init__.py
+│   │   ├── config.py
+│   │   ├── redis_manager.py # Raw Redis helper
+│   │   ├── counting.py      # Legacy counting logic
+│   │   ├── egg_counter.py   # CLI script
+│   │   ├── conveyor_monitor.py
+│   │   ├── video.py
+│   │   ├── image_processing.py
+│   │   └── visualizer.py
+│   └── main.py              # Legacy CLI entrypoint
 ```
 
 ---

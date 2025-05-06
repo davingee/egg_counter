@@ -139,6 +139,7 @@ python counter/main.py   --source=webcam       # or --source=video --path=shared
 ### ⚙️ Counter CLI (with full `--config` example)
 
 You can override all settings by passing a JSON object to `--config`. For example:
+```
 
 ```bash
 python counter/main.py \

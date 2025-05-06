@@ -4,8 +4,9 @@ A FastAPI-powered egg counting system with both a web dashboard and a standalone
 Counts eggs in video frames, stores/logs counts in Redis & PostgreSQL, exports CSVs, and streams live updates via WebSockets.
 
 ---
-
+<img width="1719" alt="dashboard" src="https://github.com/user-attachments/assets/131ac14c-94d9-4476-b457-6bff5c80f3a1" />
 ## 🔍 Project Overview
+
 
 1. **Web App** (`main.py` + `/app`)
    - **FastAPI** backend  

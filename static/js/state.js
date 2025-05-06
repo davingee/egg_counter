@@ -3,6 +3,7 @@ import { buildChart } from "./chart.js";
 
 export function app() {
   let chart = null;
+  let sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
 
   return {
     initialized: false,
@@ -12,12 +13,10 @@ export function app() {
     trends: { dates: [], house1: [], house2: [] },
     showSettings: false,
     showOptions: false,
-    // exportDate: new Date().now.toISOString().slice(0, 10),
-    // exportDate: Date().now(),
     settingsDate: "",
     settingsLoading: false,
-    exportDate: new Date().toISOString().slice(0, 10),
-    settingsDate: new Date().toISOString().slice(0, 10),
+    exportDate: sevenDaysAgo.toISOString().slice(0, 10),
+    settingsDate: sevenDaysAgo.toISOString().slice(0, 10),
     polling: false,
     socket: null,
     reconnectTimeout: null,

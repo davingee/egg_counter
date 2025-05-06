@@ -1,237 +1,166 @@
-# Egg Counter Web App
+# Egg Counter & Dashboard
 
-A real‑time egg‑counting dashboard built with **FastAPI**, **Redis**, **PostgreSQL**, **Alpine.js**, and **Chart.js**, plus a shared helper library. It tracks two “houses” of eggs, streams live counts over WebSockets, persists daily totals, and lets you manage settings and export reports.
-
----
-
-## 🚀 Features
-
-* **Real‑time updates** via Redis Pub/Sub & WebSockets
-* **Fallback to PostgreSQL** if Redis data is missing
-* **Start/Stop** counter subprocess per house
-* **Select active house** on the fly
-* **Daily persistence**: upsert into `eggs` table with date
-* **Trends chart** showing counts over the last N days
-* **Settings UI** (video, detection, output, etc.) saved in Postgres
-* **Export & email** CSV reports for any date
-* **Modular code** split into logical packages
-* **Shared helper** code kept in a sibling `egg_counter_shared` package
+A FastAPI-powered egg counting system with both a web dashboard and a standalone “counter” module.  
+Counts eggs in video frames, stores/logs counts in Redis & PostgreSQL, exports CSVs, and streams live updates via WebSockets.
 
 ---
 
-## 📦 Repository Structure
+## 🔍 Project Overview
 
-Below is the layout of this repository, viewed from the GitHub root:
+1. **Web App** (`main.py` + `/app`)
+   - **FastAPI** backend  
+   - **Alpine.js + Tailwind CSS** frontend  
+   - Real-time egg counts via WebSocket  
+   - CSV export & email  
+   - Settings management (clear Redis, delete rows, export CSV)
 
-```text
-├── requirements.txt         # pip dependencies list
-├── environment.yml          # Conda environment definition
-├── web/                     # Frontend and FastAPI app
-│   ├── tailwind.config.js   # Tailwind CSS configuration
-│   ├── postcss.config.mjs   # PostCSS setup
-│   ├── package-lock.json    # npm lockfile
-│   ├── package.json         # npm dependencies & scripts
-│   ├── static/              # Static assets (served under /static)
-│   │   ├── favicon.ico      # Browser icon
-│   │   ├── css/
-│   │   │   └── styles.css   # Compiled Tailwind CSS
-│   │   └── js/              # Frontend JavaScript
-│   │       ├── chart.js     # Chart.js plugin
-│   │       ├── state.js     # Alpine.js state logic
-│   │       ├── module.esm.js# Alpine.js module loader
-│   │       ├── chart.umd.min.js # Chart.js UMD bundle
-│   │       ├── api.js       # HTTP + WebSocket API helper
-│   │       └── app.js       # SPA initialization
-│   ├── templates/           # Jinja2 templates
-│   │   ├── navbar.html      # Navigation bar partial
-│   │   ├── index.html       # Dashboard layout
-│   │   ├── base.html        # Base HTML skeleton
-│   │   ├── chart.html       # Chart component
-│   │   └── settings.html    # Settings modal UI
-│   ├── egg_counter/         # Backend business logic
-│   │   ├── controller.py    # Manages the counter subprocess
-│   │   ├── config.py        # Pydantic settings loader
-│   │   ├── schemas.py       # Pydantic models for endpoints
-│   │   ├── clients.py       # Redis & Postgres clients
-│   │   ├── api/             # API routers
-│   │   │   ├── websocket.py # WebSocket endpoint
-│   │   │   └── routes.py    # REST endpoints
-│   │   ├── services/        # Helper services
-│   │   │   ├── csv_export.py# CSV export & email logic
-│   │   │   └── upsert.py    # Database upsert logic
-│   │   └── counts.py        # Redis fetch & fallback logic
-│   ├── main.py              # FastAPI app entrypoint
-│   └── src/
-│       └── styles.css       # Tailwind imports for development
-├── output/                  # Generated outputs
-│   └── egg_row_output.avi   # Sample video output
-├── shared/                  # Shared utility package
-│   ├── egg.mp4              # Sample media file
-│   ├── __init__.py          # Package marker
-│   └── helper.py            # Shared helper functions
-├── README.md                # This documentation
-├── .gitignore               # Git ignore rules
-├── .env                     # Environment overrides (not committed)
-├── readme.txt               # Legacy README
-├── application/             # Legacy CLI application
-│   ├── migrate_settings.py  # DB migration script
-│   ├── egg_counter/         # Legacy egg_counter package
-│   │   ├── __init__.py
-│   │   ├── config.py
-│   │   ├── redis_manager.py # Raw Redis helper
-│   │   ├── counting.py      # Legacy counting logic
-│   │   ├── egg_counter.py   # CLI script
-│   │   ├── conveyor_monitor.py
-│   │   ├── video.py
-│   │   ├── image_processing.py
-│   │   └── visualizer.py
-│   └── main.py              # Legacy CLI entrypoint
-```
+2. **Counter Module** (`/counter`)
+   - Pure-Python CLI for video-based egg counting  
+   - Reads from webcam or video file  
+   - Uses OpenCV for detection & tracking  
+   - Optional Redis pub/sub for real-time push  
+
+3. **Shared Utilities** (`/shared`)
+   - Helper functions  
+   - Migration scripts  
 
 ---
 
-## ⚙️ Prerequisites
+## 📦 Prerequisites
 
-1. **Python 3.10+**
-2. **PostgreSQL** database with an `eggs` table:
+- Python 3.9+  
+- Redis server (for live count pub/sub)  
+- PostgreSQL (for historical logging)  
+- Node.js & npm (for asset build)
 
-   ```sql
-   CREATE TABLE eggs (
-     id            SERIAL PRIMARY KEY,
-     house_number  INTEGER NOT NULL,
-     date          DATE NOT NULL,
-     count         INTEGER NOT NULL,
-     created_at    TIMESTAMP DEFAULT NOW(),
-     updated_at    TIMESTAMP DEFAULT NOW(),
-     UNIQUE (house_number, date)
-   );
+---
+
+## ⚙️ Installation
+
+1. Clone repo  
+   ```bash
+   git clone https://github.com/your-org/egg-counter.git
+   cd egg-counter
    ```
-3. **Redis** instance (>= 6.x) for pub/sub and caching.
-4. **.env** file in `egg_counter_web/`:
 
+2. Create virtual environment & install  
+   ```bash
+   python -m venv .venv
+   source .venv/bin/activate
+   pip install -r requirements.txt
+   ```
+
+3. Install JS deps and build  
+   ```bash
+   cd static
+   npm install
+   npm run build
+   cd ..
+   ```
+
+4. Configure environment variables in `.env`  
    ```ini
-   PG_DB=your_db_name
-   PG_USER=your_user
-   PG_HOST=localhost
-   PG_PORT=5432
-   PG_PASS=your_password
    REDIS_URL=redis://localhost:6379
+   DATABASE_URL=postgresql://user:pass@localhost:5432/eggdb
+   EMAIL_HOST=smtp.mail.com
+   EMAIL_PASSWORD=yourpassword
    ```
-5. **egg\_counter\_shared/** installed as an editable package (see Installation).
 
 ---
 
-## 🛠️ Installation
+## 🗂️ File Structure
 
-```bash
-# Clone repo:
-git clone git@github.com:you/egg_counter_web.git
-````
-
-# Install shared helper in editable mode:
-
-```bash
-cd egg_counter_shared
-pip install -e .
 ```
-
-# Install web app requirements:
-
-```bash
-cd ../egg_counter_web
-pip install -r requirements.txt
+.
+├── main.py                  # entrypoint for FastAPI app
+├── app/
+│   ├── controller.py        # request handlers
+│   ├── config.py            # Pydantic settings
+│   ├── schemas.py           # request/response models
+│   ├── clients.py           # Redis/Postgres/email clients
+│   ├── api/
+│   │   ├── websocket.py     # WebSocket manager
+│   │   └── routes.py        # HTTP endpoints
+│   └── services/
+│       ├── csv_export.py    # CSV & email logic
+│       └── upsert.py        # DB upsert helper
+├── counter/                 # standalone counter module
+│   └── app/
+│       ├── config.py
+│       ├── redis_manager.py
+│       ├── counting.py
+│       ├── conveyor_monitor.py
+│       ├── egg_counter.py
+│       ├── image_processing.py
+│       ├── video.py
+│       └── visualizer.py
+│   └── main.py              # CLI launcher
+├── shared/
+│   ├── helper.py            # shared utilities
+│   └── migrate_settings.py  # one-off data migrations
+├── static/                  # frontend assets
+│   ├── css/
+│   └── js/
+├── templates/               # Jinja2 HTML templates
+│   ├── base.html
+│   ├── index.html
+│   ├── chart.html
+│   ├── options.html
+│   ├── settings.html
+│   └── navbar.html
+├── output/                  # exported CSVs, logs
+├── requirements.txt
+├── environment.yml
+├── .env
+└── README.md
 ```
 
 ---
 
-## 🔧 Configuration
-
-* Edit `.env` with your DB/Redis credentials.
-* Ensure `egg_counter_shared/helper.py` is on your `PYTHONPATH` (by pip‑installing it or exporting):
+## 🚀 Running the Web App
 
 ```bash
-export PYTHONPATH="../egg_counter_shared:$PYTHONPATH"
-```
-
----
-
-## 🚀 Running Locally
-
-```bash
-cd egg_counter_web
+# activate venv
 uvicorn main:app --reload
 ```
 
-* **REST API**:  `http://localhost:8000/`
-* **WebSocket**: `ws://localhost:8000/ws/house_counts`
-* **Static files** under `/static`
-* **Templates** served from `/templates/index.html`
+- **HTTP API** runs on `http://localhost:8000`
+- **Web UI** at `http://localhost:8000/`
 
 ---
 
-## 📦 Requirements
-
-### Python (pip)
-
-Install dependencies from **requirements.txt**:
+## ⚙️ Counter CLI
 
 ```bash
-pip install -r requirements.txt
+python counter/main.py   --source=webcam       # or --source=video --path=shared/egg.mp4
 ```
 
-### Conda
-
-define your environment with **environment.yml**:
-
-```bash
-conda env create -f environment.yml
-conda activate egg_counter
-```
+- Publishes counts to Redis (if configured)  
+- Logs to console / CSV  
 
 ---
 
-## 📑 API Endpoints
+## 🔌 API Endpoints
 
-* `GET  /status`
-* `GET  /current_house`
-* `GET  /current_counts`
-* `POST /start`
-* `POST /stop`
-* `POST /select_house`
-* `GET  /trends?days=8`
-
-### Settings
-
-* `POST /settings/delete_all`
-* `POST /settings/delete_date`
-* `POST /settings/clear_redis`
-* `GET  /settings/get`
-* `PUT  /settings/update`
-* `POST /settings/export_csv`
+| Method | Path                       | Description                         |
+| ------ | -------------------------- | ----------------------------------- |
+| POST   | `/settings/delete_all`     | Delete all count records            |
+| POST   | `/settings/delete_date`    | Delete records for a given date     |
+| POST   | `/settings/clear_redis`    | Flush all Redis keys                |
+| POST   | `/settings/export_csv`     | Generate & email CSV report         |
+| GET    | `/counts/today`            | Fetch today’s counts (JSON)         |
+| WS     | `/ws/counts`               | Subscribe to live counts via WebSocket |
 
 ---
 
-## 🔄 Live Updates
+## 🤝 Contributing
 
-The frontend connects to `ws://…/ws/house_counts` and listens for JSON messages:
-
-```json
-{"house1": 120, "house2": 95}
-```
-
-It falls back to HTTP polling if the socket fails.
+1. Fork & branch  
+2. Add tests  
+3. Submit a PR  
 
 ---
 
-## 📝 Contributing
+## 📄 License
 
-1. Fork the repo
-2. Create a feature branch
-3. Make your changes, add tests
-4. Submit a pull request
-
----
-
-## 🛡️ License
-
-MIT © Your Name
+MIT © Your Name / Your Org

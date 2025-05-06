@@ -18,11 +18,11 @@ def video_path():
 
 
 def script_path():
-    return f"{project_root}/application/main.py"
+    return f"{project_root}/counter/main.py"
 
 
 def output_path():
-    return f"{project_root}/output/egg_row_output.avi"
+    return f"{project_root}/output/output.avi"
 
 
 def snapshot_path():
@@ -30,7 +30,7 @@ def snapshot_path():
 
 
 def csv_log_path():
-    return f"{project_root}/output/egg_row_log.csv"
+    return f"{project_root}/output/log.csv"
 
 
 def to_env_name(field_name: str) -> str:

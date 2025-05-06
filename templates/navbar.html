@@ -1,0 +1,40 @@
+<!-- NAV BAR -->
+<nav class="bg-white shadow sticky top-0 z-10">
+  <div class="max-w-screen-xl mx-auto w-full py-4 flex items-center justify-between">
+    <!-- Title very close to the left -->
+    <div class="ml-0">
+      <a href="/" class="text-2xl font-bold text-gray-800">Dashboard</a>
+    </div>
+
+    <!-- Buttons pushed right -->
+    <div class="flex items-center space-x-4">
+      <button @click="start()" :class="running ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-500 hover:bg-green-600'"
+        class="px-4 py-2 rounded-full text-white transition" :disabled="running">
+        Start
+      </button>
+
+      <button @click="stop()" :class="running ? 'bg-red-500 hover:bg-red-600' : 'bg-gray-400 cursor-not-allowed'"
+        class="px-4 py-2 rounded-full text-white transition" :disabled="!running">
+        Stop
+      </button>
+
+      <div class="flex items-center">
+        <label class="mr-2 font-medium text-gray-700">House:</label>
+        <select x-model="house" @change="selectHouse()"
+          class="border border-gray-300 rounded-full px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+          <option value="1">1</option>
+          <option value="2">2</option>
+        </select>
+      </div>
+
+      <button @click="showSettings = true"
+        class="border border-gray-300 rounded-full px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+        Settings
+      </button>
+      <button @click="showOptions = true"
+        class="border border-gray-300 rounded-full px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+        Options
+      </button>
+    </div>
+  </div>
+</nav>

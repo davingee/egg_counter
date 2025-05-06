@@ -28,7 +28,6 @@ Below is the layout of this repository, viewed from the GitHub root:
 ├── environment.yml          # Conda environment definition
 ├── web/                     # Frontend and FastAPI app
 │   ├── tailwind.config.js   # Tailwind CSS configuration
-│   ├── .DS_Store            # macOS metadata (ignore)
 │   ├── postcss.config.mjs   # PostCSS setup
 │   ├── package-lock.json    # npm lockfile
 │   ├── package.json         # npm dependencies & scripts
@@ -50,7 +49,6 @@ Below is the layout of this repository, viewed from the GitHub root:
 │   │   ├── chart.html       # Chart component
 │   │   └── settings.html    # Settings modal UI
 │   ├── egg_counter/         # Backend business logic
-│   │   ├── .DS_Store        # metadata (ignore)
 │   │   ├── controller.py    # Manages the counter subprocess
 │   │   ├── config.py        # Pydantic settings loader
 │   │   ├── schemas.py       # Pydantic models for endpoints
@@ -77,7 +75,6 @@ Below is the layout of this repository, viewed from the GitHub root:
 ├── readme.txt               # Legacy README
 ├── application/             # Legacy CLI application
 │   ├── migrate_settings.py  # DB migration script
-│   ├── .DS_Store            # metadata
 │   ├── egg_counter/         # Legacy egg_counter package
 │   │   ├── __init__.py
 │   │   ├── config.py

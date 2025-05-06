@@ -135,6 +135,43 @@ uvicorn main:app --reload
 python counter/main.py   --source=webcam       # or --source=video --path=shared/egg.mp4
 ```
 
+```bash
+### ⚙️ Counter CLI (with full `--config` example)
+
+You can override all settings by passing a JSON object to `--config`. For example:
+
+```bash
+python counter/main.py \
+  --command 'run' \
+  --house_number 1 \
+  --config '{
+    "debug_logging_enabled": false,
+    "use_video_file": true,
+    "webcam_index": 0,
+    "webcam_width": 640,
+    "webcam_height": 480,
+    "show_window": true,
+    "enable_waitkey": true,
+    "frame_delay_ms": 1,
+    "save_frame_image": false,
+    "save_video": true,
+    "csv_log_enabled": false,
+    "min_area": 2000,
+    "max_area": 6000,
+    "y_start_line": 150,
+    "y_count_line": 200,
+    "num_rows": 6,
+    "skip_radius_y": 25,
+    "min_frames_between_counts": 22,
+    "rotate_frame": false,
+    "motion_enabled": true,
+    "motion_threshold": 15,
+    "min_movement_frames": 5,
+    "max_stationary_frames": 30,
+    "motion_check_interval": 1
+  }'
+```
+
 - Publishes counts to Redis (if configured)  
 - Logs to console / CSV  
 

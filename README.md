@@ -26,6 +26,7 @@ Below is the layout of this repository, viewed from the GitHub root:
 ```text
 ├── README.md                # Project overview and setup instructions
 ├── requirements.txt         # Python dependencies
+├── environment.yml          # Conda environment definition
 ├── .env.example             # Environment variable template
 ├── static/                  # Frontend assets (CSS, JS, images)
 │   ├── css/
@@ -44,12 +45,10 @@ Below is the layout of this repository, viewed from the GitHub root:
 │   │   └── websocket.py     # WebSocket endpoint for live counts
 │   └── services/
 │       ├── upsert.py        # Database upsert logic
-│       └── csv_export.py    # CSV export & email logic
+│   │   └── csv_export.py    # CSV export & email logic
 └── egg_counter_shared/      # Separate package (install via pip -e)
     └── helper.py            # Shared utility functions (key generators, date math)
 ```
-
----
 
 ---
 
@@ -86,16 +85,24 @@ Below is the layout of this repository, viewed from the GitHub root:
 
 ## 🛠️ Installation
 
-```bash
+````bash
 # Clone both repos under the same parent folder:
+
+```bash
 git clone git@github.com:you/egg_counter_shared.git
 git clone git@github.com:you/egg_counter_web.git
+````
 
 # Install shared helper in editable mode:
+
+```bash
 cd egg_counter_shared
 pip install -e .
+```
 
 # Install web app requirements:
+
+```bash
 cd ../egg_counter_web
 pip install -r requirements.txt
 ```
@@ -107,9 +114,9 @@ pip install -r requirements.txt
 * Edit `.env` with your DB/Redis credentials.
 * Ensure `egg_counter_shared/helper.py` is on your `PYTHONPATH` (by pip‑installing it or exporting):
 
-  ```bash
-  export PYTHONPATH="../egg_counter_shared:$PYTHONPATH"
-  ```
+```bash
+export PYTHONPATH="../egg_counter_shared:$PYTHONPATH"
+```
 
 ---
 
@@ -124,6 +131,27 @@ uvicorn main:app --reload
 * **WebSocket**: `ws://localhost:8000/ws/house_counts`
 * **Static files** under `/static`
 * **Templates** served from `/templates/index.html`
+
+---
+
+## 📦 Requirements
+
+### Python (pip)
+
+Install dependencies from **requirements.txt**:
+
+```bash
+pip install -r requirements.txt
+```
+
+### Conda
+
+define your environment with **environment.yml**:
+
+```bash
+conda env create -f environment.yml
+conda activate egg_counter
+```
 
 ---
 

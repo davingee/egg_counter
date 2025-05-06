@@ -21,7 +21,7 @@
 
         <!-- Tabs -->
         <nav class="flex -mb-px space-x-2">
-          <template x-for="tab in ['video','display','output','detect','other','motion']" :key="tab">
+          <template x-for="tab in ['video','display','output','detect','motion', 'other']" :key="tab">
             <button @click="activeTab = tab" :class="activeTab === tab 
                       ? 'border border-t border-l border-r border-gray-300 bg-white text-blue-600' 
                       : 'border-b-2 border-transparent bg-gray-100 text-gray-600 hover:bg-white hover:border-gray-300'"
@@ -142,12 +142,12 @@
                 class="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
               <label for="rotate_frame" class="ml-2 text-sm font-medium text-gray-700">Rotate Frame 180°</label>
             </div>
-            <div class="flex items-center">
+            <!-- <div class="flex items-center">
               <input id="debug_logging_enabled" type="checkbox" x-model="settings.debug_logging_enabled"
                 class="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
               <label for="debug_logging_enabled" class="ml-2 text-sm font-medium text-gray-700">Enable Debug
                 Logging</label>
-            </div>
+            </div> -->
             <div>
               <label for="email_password" class="block text-sm font-medium text-gray-700">Email Password</label>
               <input id="email_password" type="password" x-model="settings.email_password"

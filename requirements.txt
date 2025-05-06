@@ -7,3 +7,4 @@ pydantic-settings>=2.0.0
 pytz
 Jinja2
 opencv
+psycopg2

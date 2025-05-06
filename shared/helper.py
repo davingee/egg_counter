@@ -126,7 +126,7 @@ class SettingsUpdate(BaseModel):
     min_frames_between_counts: int
     # lower_hsv: List[int]
     # upper_hsv: List[int]
-    rotate_frame: bool
+    rotate_frame: str
     motion_enabled: bool
     motion_threshold: float
     min_movement_frames: int

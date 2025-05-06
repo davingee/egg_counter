@@ -27,9 +27,15 @@ class VideoCapture:
 
     def read_frame(self):
         success, frame = self.cap.read()
-        if success and self.settings.rotate_frame:
-            frame = cv2.rotate(frame, cv2.ROTATE_180)
-            # ROTATE_90_CLOCKWISE, ROTATE_90_COUNTERCLOCKWISE, ROTATE_180
+        rotation_map = {
+            'ROTATE_180': cv2.ROTATE_180,
+            'ROTATE_90_CLOCKWISE': cv2.ROTATE_90_CLOCKWISE,
+            'ROTATE_90_COUNTERCLOCKWISE': cv2.ROTATE_90_COUNTERCLOCKWISE,
+        }
+        rotation = rotation_map.get(self.settings.rotate_frame)
+        if rotation is not None:
+            frame = cv2.rotate(frame, rotation)
+
 
         return success, frame
 

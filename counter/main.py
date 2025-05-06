@@ -47,7 +47,7 @@ def main():
                 "min_frames_between_counts": args.config.get(
                     "min_frames_between_counts", 22
                 ),
-                "rotate_frame": args.config.get("rotate_frame", False),
+                "rotate_frame": args.config.get("rotate_frame", 'NONE'),
                 "motion_enabled": args.config.get("motion_enabled", True),
                 "motion_threshold": args.config.get("motion_threshold", 15),
                 "min_movement_frames": args.config.get("min_movement_frames", 5),

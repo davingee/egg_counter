@@ -45,7 +45,7 @@ def main():
           num_rows INTEGER NOT NULL DEFAULT 6,
           skip_radius_y INTEGER NOT NULL DEFAULT 25,
           min_frames_between_counts INTEGER NOT NULL DEFAULT 22,
-          rotate_frame BOOLEAN NOT NULL DEFAULT FALSE,
+          rotate_frame VARCHAR(50) NOT NULL DEFAULT 'NONE',
           motion_enabled BOOLEAN NOT NULL DEFAULT TRUE,
           motion_threshold DOUBLE PRECISION NOT NULL DEFAULT 15.0,
           min_movement_frames INTEGER NOT NULL DEFAULT 5,
@@ -56,38 +56,41 @@ def main():
           updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
       );"""
     )
+
     cur.execute(
         """INSERT INTO settings (
-    debug_logging_enabled,
-    use_video_file,
-    webcam_index,
-    webcam_width,
-    webcam_height,
-    show_window,
-    enable_waitkey,
-    frame_delay_ms,
-    save_frame_image,
-    save_video,
-    csv_log_enabled,
-    min_area,
-    max_area,
-    y_start_line,
-    y_count_line,
-    num_rows,
-    skip_radius_y,
-    min_frames_between_counts,
-    rotate_frame,
-    motion_enabled,
-    motion_threshold,
-    min_movement_frames,
-    max_stationary_frames,
-    motion_check_interval,
-    email_password
+        debug_logging_enabled,
+        use_video_file,
+        webcam_index,
+        webcam_width,
+        webcam_height,
+        show_window,
+        enable_waitkey,
+        frame_delay_ms,
+        save_frame_image,
+        save_video,
+        csv_log_enabled,
+        min_area,
+        max_area,
+        y_start_line,
+        y_count_line,
+        num_rows,
+        skip_radius_y,
+        min_frames_between_counts,
+        lower_hsv,
+        upper_hsv,
+        rotate_frame,
+        motion_enabled,
+        motion_threshold,
+        min_movement_frames,
+        max_stationary_frames,
+        motion_check_interval,
+        email_password
     )
     SELECT
-    FALSE, FALSE, 0, 640, 480, TRUE, TRUE, 100,
-    FALSE, FALSE, FALSE, 0, 0, 150, 200, 6,
-    25, 22, ARRAY[0,0,100], ARRAY[180,45,255], FALSE,
+    FALSE, FALSE, 0, 640, 480, TRUE, TRUE, 1,
+    FALSE, FALSE, FALSE, 2000, 6000, 150, 200, 6,
+    25, 22, ARRAY[0,0,100], ARRAY[180,45,255], "NONE",
     TRUE, 15.0, 5, 30, 1, ''
     WHERE NOT EXISTS (SELECT 1 FROM settings);
     """

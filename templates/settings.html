@@ -55,6 +55,27 @@
               <input id="webcam_height" type="number" x-model.number="settings.webcam_height"
                 class="mt-1 block w-32 rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200" />
             </div>
+
+            <div class="flex flex-col space-y-2">
+              <label for="rotate_frame" class="text-sm font-medium text-gray-700">Rotate Frame</label>
+              <div class="relative">
+                <select id="rotate_frame" x-model="settings.rotate_frame"
+                  class="block w-full appearance-none rounded-lg border border-gray-300 bg-white px-4 py-2 pr-10 text-sm text-gray-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                  <option value="NONE">None</option>
+                  <option value="ROTATE_90_CLOCKWISE">Rotate 90° Clockwise</option>
+                  <option value="ROTATE_90_COUNTERCLOCKWISE">Rotate 90° Counterclockwise</option>
+                  <option value="ROTATE_180">Rotate 180°</option>
+                </select>
+                <!-- Dropdown arrow -->
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                  <svg class="h-4 w-4 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M7 7l3-3 3 3m0 6l-3 3-3-3" />
+                  </svg>
+                </div>
+              </div>
+            </div>
           </div>
 
           <!-- Display Tab -->
@@ -137,11 +158,6 @@
 
           <!-- Image Tab -->
           <div x-show="activeTab==='other'" x-cloak class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div class="flex items-center">
-              <input id="rotate_frame" type="checkbox" x-model="settings.rotate_frame"
-                class="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
-              <label for="rotate_frame" class="ml-2 text-sm font-medium text-gray-700">Rotate Frame 180°</label>
-            </div>
             <!-- <div class="flex items-center">
               <input id="debug_logging_enabled" type="checkbox" x-model="settings.debug_logging_enabled"
                 class="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />

@@ -5,6 +5,7 @@ from pathlib import Path
 from app.clients import db
 from shared import helper
 from app.schemas import DateSelection
+from datetime import date
 
 
 def send_csv_email(
@@ -33,14 +34,14 @@ def send_csv_email(
         server.send_message(msg)
 
 
-async def export_eggs_to_csv(selection: DateSelection):
+async def export_eggs_to_csv(selection: date):
     query = """
     SELECT * FROM eggs
     WHERE date >= :start
     ORDER BY date ASC
     """
-    rows = await db.fetch_all(query=query, values={"start": selection.date})
-    csv_path = helper.csv_name(selection.date)
+    rows = await db.fetch_all(query=query, values={"start": selection})
+    csv_path = helper.csv_name(selection)
     with open(csv_path, mode="w", newline="") as f:
         writer = csv.writer(f)
         if rows:

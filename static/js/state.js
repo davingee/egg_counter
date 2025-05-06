@@ -11,8 +11,13 @@ export function app() {
     counts: { 1: 0, 2: 0 },
     trends: { dates: [], house1: [], house2: [] },
     showSettings: false,
+    showOptions: false,
+    // exportDate: new Date().now.toISOString().slice(0, 10),
+    // exportDate: Date().now(),
     settingsDate: "",
     settingsLoading: false,
+    exportDate: new Date().toISOString().slice(0, 10),
+    settingsDate: new Date().toISOString().slice(0, 10),
     polling: false,
     socket: null,
     reconnectTimeout: null,
@@ -161,6 +166,60 @@ export function app() {
           this.saving = false;
           alert("Failed to save settings");
         });
+    },
+    async deleteAll() {
+      if (!confirm("Delete ALL rows?")) return;
+      this.settingsLoading = true;
+      try {
+        const { deleted } = await this.api.post("/settings/delete_all");
+        alert(`Deleted ${deleted} rows.`);
+      } catch {
+        alert("Failed to delete all rows.");
+      } finally {
+        this.settingsLoading = false;
+      }
+    },
+    async deleteByDate() {
+      if (!this.settingsDate) return;
+      if (!confirm(`Delete rows on ${this.settingsDate}?`)) return;
+      this.settingsLoading = true;
+      try {
+        const { deleted } = await this.api.post("/settings/delete_date", {
+          date: this.settingsDate,
+        });
+        alert(`Deleted ${deleted} rows for ${this.settingsDate}.`);
+      } catch {
+        alert("Failed to delete by date.");
+      } finally {
+        this.settingsLoading = false;
+      }
+    },
+    async clearRedis() {
+      if (!confirm("Clear all Redis keys?")) return;
+      this.settingsLoading = true;
+      try {
+        const { deleted_keys } = await this.api.post("/settings/clear_redis");
+        alert(`Cleared ${deleted_keys} keys.`);
+      } catch {
+        alert("Failed to clear Redis keys.");
+      } finally {
+        this.settingsLoading = false;
+      }
+    },
+    async exportCsv() {
+      if (!this.exportDate) return;
+      if (!confirm("export to csv and email?")) return;
+      this.settingsLoading = true;
+      try {
+        const { exported_csv } = await this.api.post("/settings/export_csv", {
+          date: this.exportDate,
+          password: this.settings.email_password,
+        });
+      } catch {
+        alert("Failed to export csv.");
+      } finally {
+        this.settingsLoading = false;
+      }
     },
   };
 }

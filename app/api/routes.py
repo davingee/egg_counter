@@ -4,7 +4,7 @@ from typing import Dict
 from app.clients import redis_client, db
 from app.counts import get_counts_from_redis, fallback_all_counts, upsert_count
 from app.controller import counter
-from app.schemas import HouseSelection, DateSelection
+from app.schemas import HouseSelection, DateSelection, ExportSelection
 from app.services.csv_export import (
     send_csv_email,
     export_eggs_to_csv,
@@ -194,16 +194,16 @@ async def api_update_settings(values: helper.SettingsUpdate):
 
 
 @router.post("/settings/export_csv")
-async def api_export_csv(selection: DateSelection, password: str):
+async def api_export_csv(options: ExportSelection):
     cleanup_egg_csvs()
-    csv_path = await export_eggs_to_csv(selection)
+    csv_path = await export_eggs_to_csv(options.date)
     send_csv_email(
         smtp_server="smtp.gmail.com",
         port=465,
-        sender_email="you@example.com",
-        sender_password=password,
-        recipient_email="you@example.com",
+        sender_email="scottsmit@gmail.com",
+        sender_password=options.password,
+        recipient_email="scottsmit@gmail.com",
         file_path=csv_path,
-        content=f"Attached is your CSV report from {selection.date} to today.",
+        content=f"Attached is your CSV report from {options.date} to today.",
     )
     return {"exported_and_emailed_csv": True}

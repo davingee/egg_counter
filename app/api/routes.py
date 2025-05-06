@@ -27,8 +27,7 @@ def favicon():
 
 @router.get("/status")
 async def api_status() -> Dict[str, bool]:
-    running = await redis_client.get(helper.get_redis_app_running_key())
-    return {"running": running == "1"}
+    return {"running": helper.is_process_active()}
 
 
 @router.get("/current_house")
@@ -52,7 +51,6 @@ async def api_current_counts() -> Dict[str, int]:
 
 async def start_counter(house_number: int, values):
     counter.start(house_number, values)
-    await redis_client.set(helper.get_redis_app_running_key(), "1")
 
 
 @router.post("/start")
@@ -63,7 +61,6 @@ async def api_start(body: helper.StartRequest) -> Dict[str, bool]:
 
 async def stop_and_save(house_number: int):
     counter.stop()
-    await redis_client.set(helper.get_redis_app_running_key(), "0")
     counts = await get_counts_from_redis()
     count = counts.get(f"house{house_number}", 0)
     await upsert_count(house_number, count)

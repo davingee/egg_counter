@@ -2,7 +2,8 @@ from datetime import datetime, timedelta
 import pytz  # type: ignore
 from pydantic import BaseModel  # type: ignore
 from pathlib import Path
-
+import os
+import signal
 
 def time_zone():
     return "America/Denver"
@@ -53,10 +54,6 @@ def get_redis_house_key() -> str:
     return "eggs:current_house"
 
 
-def get_redis_app_running_key() -> str:
-    return "eggs:running"
-
-
 def seconds_until_midnight_mtn() -> int:
     now = datetime.now(MOUNTAIN_TZ)
     tomorrow = (now + timedelta(days=1)).replace(
@@ -74,6 +71,39 @@ def get_now_minus_days(days):
 def csv_name(date):
     return f"eggs_today_{date}.csv"
 
+def get_pid_file():
+    return f"/tmp/egg_counter.pid"
+
+def create_pid_file():
+    pid_file = get_pid_file() 
+    with open(pid_file, "w") as f:
+        f.write(str(os.getpid()))
+
+def remove_pid_file():
+    pid_file = get_pid_file() 
+    if os.path.exists(pid_file):
+        os.remove(pid_file)
+
+
+
+def is_process_active() -> bool:
+    pid_file = get_pid_file() 
+    if not os.path.exists(pid_file):
+        return False
+
+    try:
+        with open(pid_file, "r") as f:
+            pid = int(f.read().strip())
+
+        # Send signal 0 to check if the process exists (doesn't actually kill it)
+        os.kill(pid, 0)
+        return True
+
+    except (ValueError, ProcessLookupError, PermissionError):
+        # ValueError: invalid PID in file
+        # ProcessLookupError: no process with that PID
+        # PermissionError: not allowed to check that PID (unlikely on your own scripts)
+        return False
 
 class SettingsUpdate(BaseModel):
     debug_logging_enabled: bool

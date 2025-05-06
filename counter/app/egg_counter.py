@@ -5,6 +5,8 @@ from .counting import CountingManager
 from .visualizer import Visualizer
 from .conveyor_monitor import ConveyorMonitor
 from contextlib import contextmanager
+import os
+from shared import helper
 import csv
 import cv2
 
@@ -30,16 +32,22 @@ class EggCounter:
         self.visualizer.initialize_display()
 
     def run(self):
-        width, height = self.video_capture.frame_size
-        with self._get_csv_writer() as csv_writer:
-            while True:
-                success, frame = self.video_capture.read_frame()
-                if not success:
-                    break
-                self._process_frame(frame, width, height, csv_writer)
-                if self._should_exit():
-                    break
-        self._cleanup()
+        helper.create_pid_file()
+
+        try:
+
+            width, height = self.video_capture.frame_size
+            with self._get_csv_writer() as csv_writer:
+                while True:
+                    success, frame = self.video_capture.read_frame()
+                    if not success:
+                        break
+                    self._process_frame(frame, width, height, csv_writer)
+                    if self._should_exit():
+                        break
+            self._cleanup()
+        finally:
+            helper.remove_pid_file()
 
     def _process_frame(self, frame, width, height, csv_writer):
         self.visualizer.draw_guides(frame, width)

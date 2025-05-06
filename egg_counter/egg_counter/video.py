@@ -12,7 +12,6 @@ class VideoCapture:
         self.fps = self.cap.get(cv2.CAP_PROP_FPS) or 30.0
 
     def _initialize_capture(self):
-        print(str(self.settings.video_path))
         source = (
             str(self.settings.video_path)
             if self.settings.use_video_file

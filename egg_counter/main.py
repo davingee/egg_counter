@@ -22,13 +22,12 @@ def main():
         args = parser.parse_args()
         settings = Settings()
         app_path = settings.app_path
-        print(f"config: {args.config}")
         updated_settings = settings.model_copy(
             update={
                 "video_path": f"{app_path}/{helper.video_path()}",
                 "output_path": f"{app_path}/{helper.output_path()}",
                 "csv_log_path": f"{app_path}/{helper.csv_log_path()}",
-                "snapshots_dir": f"{app_path}/{Path("snapshots")}",
+                "snapshots_dir": f"{app_path}/{Path('snapshots')}",
                 "debug_logging_enabled": args.config.get("debug_logging_enabled"),
                 "use_video_file": args.config.get("use_video_file"),
                 "webcam_index": args.config.get("webcam_index"),

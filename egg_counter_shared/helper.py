@@ -1,7 +1,6 @@
 from datetime import datetime, timedelta
 import pytz  # type: ignore
 from pydantic import BaseModel  # type: ignore
-from typing import List
 from pathlib import Path
 
 
@@ -17,17 +16,7 @@ def video_path():
 
 
 def script_path():
-
     project_root = Path(__file__).resolve().parents[1]
-
-    # 2. Go up two levels:
-    #    - parents[0] is the directory containing this file (egg_counter_web)
-    #    - parents[1] is its parent (egg_counter)
-    # project_root = here.parents[1]
-
-    # 3. Build the path to egg_counter_shared
-    # shared_dir = f"{project_root}/egg_counter/main.py"
-    print(f"{project_root}/egg_counter/main.py")
     return f"{project_root}/egg_counter/main.py"
 
 
@@ -52,7 +41,7 @@ def now_time():
 
 
 def get_redis_count_key():
-    return f"eggs:counts:{now_time().strftime("%Y-%m-%d")}"
+    return f"eggs:counts:{now_time().strftime('%Y-%m-%d')}"
 
 
 def get_redis_house_key() -> str:

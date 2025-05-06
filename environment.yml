@@ -1,0 +1,18 @@
+name: egg
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - pip
+  - pytz
+  - opencv
+  - pip:
+    - fastapi>=0.95.0
+    - uvicorn[standard]>=0.22.0
+    - redis>=4.5.1
+    - databases[postgresql]>=0.6.4
+    - asyncpg>=0.27.0
+    - python-dotenv>=1.0.0
+    - pydantic-settings>=2.0.0
+    - Jinja2>=3.1.2

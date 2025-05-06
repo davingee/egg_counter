@@ -1,0 +1,9 @@
+fastapi>=0.95.0
+redis>=4.5.1
+databases[postgresql]>=0.6.4
+asyncpg>=0.27.0
+python-dotenv>=1.0.0
+pydantic-settings>=2.0.0
+pytz
+Jinja2
+opencv

@@ -5,7 +5,9 @@ import logging
 from shared import helper
 
 logger = logging.getLogger(__name__)
-
+import os
+env = os.environ.copy()
+env["PYTHONPATH"] = "."
 
 class EggCounterController:
     def __init__(self):
@@ -28,14 +30,26 @@ class EggCounterController:
                 str(house_number),
                 "--config",
                 config_json,
-            ]
+            ],
+        cwd="../",  # IMPORTANT: this should be where app/, counter/, shared/ live
+        env=env,
+        start_new_session=False
         )
+
 
     def stop(self) -> None:
         if self.process and self.process.poll() is None:
             logger.info("Stopping counter.")
-            self.process.terminate()
-            self.process.wait()
+            # self.process.terminate()
+            # self.process.wait()
 
+            self.process.terminate()
+
+            try:
+                self.process.wait(timeout=2)  # seconds to wait for graceful exit
+            except subprocess.TimeoutExpired:
+                print("Process did not terminate in time; killing it.")
+                self.process.kill()  # force kill
+                self.process.wait() #sdfdasdf
 
 counter = EggCounterController()

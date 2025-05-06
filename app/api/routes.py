@@ -14,12 +14,6 @@ from shared import helper
 
 router = APIRouter()
 
-
-# @router.get("/", response_class=FileResponse)
-# async def read_index():
-#     return "static/index.html"
-
-
 @router.get("/favicon.ico")
 def favicon():
     return FileResponse("static/favicon.ico")

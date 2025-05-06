@@ -1,13 +1,12 @@
 import sys, os
-
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from shared import helper
 import argparse
 import json
 import logging
 import sys
-from app.config import Settings
-from app.egg_counter import EggCounter
+from counter.app.config import Settings
+from counter.app.egg_counter import EggCounter
 
 
 def main():

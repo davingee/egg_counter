@@ -86,8 +86,7 @@ Below is the layout of this repository, viewed from the GitHub root:
 ## 🛠️ Installation
 
 ```bash
-# Clone both repos under the same parent folder:
-git clone git@github.com:you/egg_counter_shared.git
+# Clone repo:
 git clone git@github.com:you/egg_counter_web.git
 ````
 

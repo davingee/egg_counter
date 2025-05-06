@@ -1,11 +1,6 @@
-import importlib
 from dotenv import load_dotenv  # type: ignore
 
 load_dotenv(override=True)
-import sys, os
-
-project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-sys.path.insert(0, project_root)
 from shared import helper
 from fastapi import FastAPI, Request  # type: ignore
 from fastapi.staticfiles import StaticFiles  # type: ignore

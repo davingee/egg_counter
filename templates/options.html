@@ -17,11 +17,11 @@
       </div>
 
       <!-- Tabs + Panels -->
-      <div x-data="{ activeTab: 'Delete DB' }" class="px-6 pt-4">
+      <div x-data="{ activeTab: 'Export' }" class="px-6 pt-4">
 
         <!-- Tabs -->
         <nav class="flex -mb-px space-x-2">
-          <template x-for="tab in ['Delete DB', 'Clear Redis','Export']" :key="tab">
+          <template x-for="tab in ['Export', 'Delete DB', 'Clear Redis']" :key="tab">
             <button @click="activeTab = tab" :class="activeTab === tab 
                       ? 'border border-t border-l border-r border-gray-300 bg-white text-blue-600' 
                       : 'border-b-2 border-transparent bg-gray-100 text-gray-600 hover:bg-white hover:border-gray-300'"
